@@ -1,0 +1,24 @@
+<%- include('../partials/head') %>
+    </head>
+    <body>
+        <main >
+            <header>
+                <%- include('../partials/nav', {isLoggedIn:  isLoggedIn}) %>
+            </header>
+            <div class="center">
+                <div>
+                    <h1>Login</h1>
+                </div>
+                <% if (error_msg) { %>
+                    <p><%= error_msg %></p>
+                <% } %>
+                <form action="/login" method="post">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                    <input type="email" name="email" placeholder="Email" class="input"/> <br />
+                    <input type="password" name="password" placeholder="Password" class="input"/> <br />
+                    <button class="btn" type="submit">Login</button>
+                </form>
+            </div>
+        </main>
+<%- include('../partials/end') %>
+ 

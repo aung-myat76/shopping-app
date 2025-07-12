@@ -1,0 +1,13 @@
+<%- include('../partials/head') %>
+    </head>
+    <body>
+        <main >
+            <header>
+                <%- include('../partials/nav', {isLoggedIn:  isLoggedIn}) %>
+            </header>
+                <div>
+                    <h2><%= product.title %></h2>
+                    <p><%= product.description %></p>
+                </div>
+        </main>
+<%- include('../partials/end') %>

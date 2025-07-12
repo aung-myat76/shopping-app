@@ -1,0 +1,22 @@
+<%- include('../partials/head') %>
+    </head>
+    <body>
+        <main >
+            <header>
+                <%- include('../partials/nav', {isLoggedIn: isLoggedIn}) %>
+            </header>
+            <div class="center">
+                <div>
+                    <h1>Create Product</h1>
+                </div>
+                <form action="/admin/add-product" method="post">
+                    <input type="text" name="title" placeholder="Name" class="input"/> <br />
+                    <input type="number" name="price" placeholder="Price" class="input"/> <br />
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                    <textarea name="description" placeholder="Description" class="input"></textarea> <br />
+                    <button class="btn" type="submit">Create</button>
+                </form>
+            </div>
+        </main>
+<%- include('../partials/end') %>
+ 

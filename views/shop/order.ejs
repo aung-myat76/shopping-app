@@ -1,0 +1,32 @@
+<%- include('../partials/head') %>
+    </head>
+    <body>
+        <main >
+            <header>
+                <%- include('../partials/nav', {isLoggedIn:  isLoggedIn}) %>
+            </header>
+            <div class="center">
+                <h1>Order List</h1> <hr >
+                <ul>
+                <% if (orders.length > 0) { %>
+                    <% for (let order of orders) { %>
+                        <li>
+                            <h2>Order Id: <%= order._id %></h2>
+                            <p>Ordered By: <%= order.user.name %></p>
+                            <div>
+                                <% for (let product of order.products) { %>
+                                    <h2><%= product.product.title %></h2>
+                                    <strong><%= product.product.price %></strong>
+                                    <strong>(<%= product.qty %>)</strong>
+                                <% } %>
+                            </div>
+                            
+                        </li> <hr />
+                    <% } %>
+                <% } else { %>
+                    <h2>There's nothing in order...</h2>
+                <% } %>
+                </ul>
+            </div>
+        </main>
+        <%- include('../partials/end') %>
