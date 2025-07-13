@@ -1,32 +1,117 @@
 <%- include('../partials/head') %>
-    </head>
-    <body>
-        <main >
-            <header>
-                <%- include('../partials/nav', {isLoggedIn:  isLoggedIn}) %>
-            </header>
-            <div class="center">
-                <h1>Order List</h1> <hr >
-                <ul>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    main {
+        padding: 2rem;
+    }
+
+    header {
+        margin-bottom: 2rem;
+    }
+
+    .center {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 2rem 2.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 1.5rem;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        border-bottom: 1px solid #ddd;
+        padding: 1.5rem 0;
+    }
+
+    li:last-child {
+        border-bottom: none;
+    }
+
+    li h2 {
+        font-size: 1.1rem;
+        margin: 0.3rem 0;
+        color: #333;
+    }
+
+    li p {
+        color: #555;
+        margin: 0.2rem 0 1rem;
+        font-size: 0.95rem;
+    }
+
+    li strong {
+        display: inline-block;
+        margin-right: 1rem;
+        font-weight: 600;
+        color: #007BFF;
+    }
+
+    .product {
+        margin-left: 1rem;
+        padding: 0.25rem 0;
+    }
+
+    .empty-message {
+        text-align: center;
+        font-size: 1.2rem;
+        color: #888;
+        margin-top: 2rem;
+    }
+</style>
+</head>
+
+<body>
+    <main>
+        <header>
+            <%- include('../partials/nav', { isLoggedIn: isLoggedIn }) %>
+        </header>
+
+        <div class="center">
+            <h1>Order List</h1>
+            <hr />
+
+            <ul>
                 <% if (orders.length > 0) { %>
                     <% for (let order of orders) { %>
                         <li>
-                            <h2>Order Id: <%= order._id %></h2>
-                            <p>Ordered By: <%= order.user.name %></p>
-                            <div>
-                                <% for (let product of order.products) { %>
+                            <h2>Order ID: <%= order._id %></h2>
+                            <p>Ordered By: <%= order.user.email %></p>
+
+                            <% for (let product of order.products) { %>
+                                <div class="product">
                                     <h2><%= product.product.title %></h2>
-                                    <strong><%= product.product.price %></strong>
-                                    <strong>(<%= product.qty %>)</strong>
-                                <% } %>
-                            </div>
-                            
-                        </li> <hr />
+                                    <strong>Price: $<%= product.product.price.toFixed(2) %></strong>
+                                    <strong>Qty: <%= product.qty %></strong>
+                                </div>
+                            <% } %>
+                        </li>
                     <% } %>
                 <% } else { %>
-                    <h2>There's nothing in order...</h2>
+                    <div class="empty-message">
+                        <h2>There's nothing in order...</h2>
+                    </div>
                 <% } %>
-                </ul>
-            </div>
-        </main>
-        <%- include('../partials/end') %>
+            </ul>
+        </div>
+    </main>
+
+<%- include('../partials/end') %>

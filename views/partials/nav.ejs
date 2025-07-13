@@ -1,66 +1,103 @@
+<style>
+    nav {
+        background-color: #fff;
+        padding: 1rem 2rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: sans-serif;
+    }
+
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 1.5rem;
+        padding: 0;
+        margin: 0;
+    }
+
+    nav a,
+    nav button {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: color 0.3s, border-bottom 0.3s;
+        padding-bottom: 2px;
+    }
+
+    nav a:hover,
+    nav button:hover {
+        color: #007bff;
+    }
+
+    .active {
+        color: #007bff;
+        font-weight: 600;
+        border-bottom: 2px solid #007bff;
+    }
+
+    form {
+        display: inline;
+    }
+</style>
+
 <nav>
+    <!-- Left: Navigation Links -->
     <ul>
         <li>
-            <a href="/" class="<%= path === '/' ? 'active' : 'none' %>">Home</a>
+            <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
         </li>
         <% if (isLoggedIn) { %>
         <li>
-            <a href="/cart" class="<%= path === '/cart' ? 'active' : 'none' %>"
+            <a href="/cart" class="<%= path === '/cart' ? 'active' : '' %>"
                 >Cart</a
             >
         </li>
         <li>
-            <a
-                href="/order"
-                class="<%= path === '/order' ? 'active' : 'none' %>"
+            <a href="/order" class="<%= path === '/order' ? 'active' : '' %>"
                 >Order</a
             >
         </li>
         <li>
             <a
                 href="/admin/add-product"
-                class="<%= path === '/admin/add-product' ? 'active' : 'none' %>"
+                class="<%= path === '/admin/add-product' ? 'active' : '' %>"
                 >Add Item</a
             >
         </li>
         <li>
             <a
                 href="/admin/products"
-                class="<%= path === '/admin/products' ? 'active' : 'none' %>"
-            >
-                Admin Products</a
+                class="<%= path === '/admin/products' ? 'active' : '' %>"
+                >Admin Products</a
             >
         </li>
         <% } %>
     </ul>
+
+    <!-- Right: Auth Controls -->
     <ul>
-        <% if(isLoggedIn) { %>
+        <% if (isLoggedIn) { %>
         <li>
-            <form action="/logout" method="post">
+            <form action="/logout" method="POST">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                <button
-                    type="submit"
-                    class="<%= path === '/logout' ? 'active' : 'none' %>"
-                >
-                    Logout
-                </button>
+                <button type="submit">Logout</button>
             </form>
         </li>
         <% } else { %>
         <li>
-            <a
-                href="/login"
-                class="<%= path === '/login' ? 'active' : 'none' %>"
-            >
-                Login</a
+            <a href="/login" class="<%= path === '/login' ? 'active' : '' %>"
+                >Login</a
             >
         </li>
         <li>
-            <a
-                href="/signup"
-                class="<%= path === '/signup' ? 'active' : 'none' %>"
-            >
-                Sign Up</a
+            <a href="/signup" class="<%= path === '/signup' ? 'active' : '' %>"
+                >Sign Up</a
             >
         </li>
         <% } %>

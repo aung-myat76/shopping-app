@@ -21,9 +21,16 @@
     "version": "1.0.0",
     "main": "app.js",
     "scripts": {
-        "server": "nodemon --watch  app.js"
+        "server": "nodemon --watch  app.js",
+        "build:css": "npx tailwindcss -i ./public/css/tailwind.css -o ./public/css/main.css --watch"
     },
     "author": "",
     "license": "ISC",
+    "devDependencies": {
+        "autoprefixer": "^10.4.21",
+        "postcss": "^8.5.6",
+        "tailwindcss": "^4.1.11"
+    },
+    "keywords": [],
     "description": ""
 }

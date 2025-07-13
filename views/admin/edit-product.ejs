@@ -1,23 +1,100 @@
 <%- include('../partials/head') %>
-    </head>
-    <body>
-        <main >
-            <header>
-                <%- include('../partials/nav', {isLoggedIn: isLoggedIn}) %>
-            </header>
-            <div class="center">
-                <div>
-                    <h1>Edit Product</h1>
-                </div>
-                <form action="/admin/edit-product" method="post">
-                    <input type="hidden" name="productId" value="<%= product._id %>" />
-                    <input type="text" name="title" placeholder="Product name" class="input" value="<%= product.title %>"/> <br />
-                    <input type="number" name="price" placeholder="Price" class="input" value="<%= product.price %>"/> <br />
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                    <textarea name="description" placeholder="Detail" class="input"><%= product.description %></textarea> <br />
-                    <button type="submit">Update</button>
-                </form>
-            </div>
-        </main>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    main {
+        padding: 2rem;
+    }
+
+    header {
+        margin-bottom: 2rem;
+    }
+
+    .center {
+        max-width: 500px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 2rem 2.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .center h1 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+        color: #333;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .input {
+        font-size: 1rem;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        resize: vertical;
+    }
+
+    .input:focus {
+        outline: none;
+        border-color: #007BFF;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    }
+
+    textarea.input {
+        min-height: 100px;
+    }
+
+    button {
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        padding: 0.75rem;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        text-transform: uppercase;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+</style>
+</head>
+
+<body>
+    <main>
+        <header>
+            <%- include('../partials/nav', { isLoggedIn: isLoggedIn }) %>
+        </header>
+
+        <div class="center">
+            <h1>Edit Product</h1>
+
+            <form action="/admin/edit-product" method="post">
+                <input type="hidden" name="productId" value="<%= product._id %>" />
+
+                <input type="text" name="title" placeholder="Product name" class="input" value="<%= product.title %>" required />
+
+                <input type="number" name="price" placeholder="Price" class="input" value="<%= product.price %>" min="0" step="0.01" required />
+
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+
+                <textarea name="description" placeholder="Detail" class="input" required><%= product.description %></textarea>
+
+                <button type="submit">Update</button>
+            </form>
+        </div>
+    </main>
 <%- include('../partials/end') %>
- 

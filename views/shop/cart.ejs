@@ -1,40 +1,160 @@
 <%- include('../partials/head') %>
-    </head>
-    <body>
-        <main >
-            <header>
-                <%- include('../partials/nav', {isLoggedIn:  isLoggedIn}) %>
-            </header>
-            <div class="center">
-                <h1>Cart List</h1> <hr >
-                <h2>Total: <%=totalPrice %></h2>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    main {
+        padding: 2rem;
+    }
+
+    header {
+        margin-bottom: 2rem;
+    }
+
+    .center {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 2rem 2.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    hr {
+        margin: 1rem 0 2rem;
+    }
+
+    .total {
+        font-size: 1.25rem;
+        color: #007BFF;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+        padding: 1rem 0;
+    }
+
+    li h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #222;
+    }
+
+    li strong {
+        margin-left: 0.5rem;
+        color: #555;
+        font-size: 1rem;
+    }
+
+    li form {
+        display: inline;
+    }
+
+    button {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+        background-color: #c82333;
+    }
+
+    .order-form {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+    .order-form button {
+        background-color: #28a745;
+        padding: 0.6rem 1.2rem;
+        font-size: 1rem;
+    }
+
+    .order-form button:hover {
+        background-color: #218838;
+    }
+
+    .empty-message {
+        text-align: center;
+        font-size: 1.1rem;
+        color: #888;
+        margin-top: 2rem;
+    }
+</style>
+</head>
+
+<body>
+    <main>
+        <header>
+            <%- include('../partials/nav', { isLoggedIn: isLoggedIn }) %>
+        </header>
+
+        <div class="center">
+            <h1>Cart List</h1>
+            <hr>
+
+            <% if (products.length > 0) { %>
+                <div class="total">Total: $<%= totalPrice.toFixed(2) %></div>
                 <ul>
-                <% if (products.length > 0) { %>
                     <% for (let product of products) { %>
                         <li>
                             <div>
                                 <h2><%= product.productId.title %></h2>
-                                <strong><%= product.productId.price %></strong>
-                                <strong>(<%= product.qty %>)</strong>
+                                <strong>$<%= product.productId.price.toFixed(2) %></strong>
+                                <strong>(Qty: <%= product.qty %>)</strong>
                             </div>
                             <div>
-                                <form  action="/delete-cart" method="post" >
+                                <form action="/delete-cart" method="post">
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                                     <input type="hidden" name="productId" value="<%= product.productId._id %>" />
                                     <button type="submit">Delete</button>
                                 </form>
-                                
                             </div>
                         </li>
                     <% } %>
-                    <form  action="/add-order" method="post" >
-                        <button type="submit">Add to order</button>
-                    </form>
-                <% } else { %>
-                    <h2>There's nothing in cart...</h2>
-                <% } %>
                 </ul>
-                
-            </div>
-        </main>
-        <%- include('../partials/end') %>
+
+                <div class="order-form">
+                    <form action="/add-order" method="post">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                        <button type="submit">Add to Order</button>
+                    </form>
+                </div>
+            <% } else { %>
+                <div class="empty-message">
+                    <h2>There's nothing in cart...</h2>
+                </div>
+            <% } %>
+        </div>
+    </main>
+
+    <%- include('../partials/end') %>

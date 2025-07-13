@@ -1,22 +1,131 @@
 <%- include('../partials/head') %>
-    </head>
-    <body>
-        <main >
-            <header>
-                <%- include('../partials/nav', {isLoggedIn:  isLoggedIn}) %>
-            </header>
-            <div class="center">
-                <h1>Admin Products List</h1> <hr >
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    main {
+        padding: 2rem;
+    }
+
+    header {
+        margin-bottom: 2rem;
+    }
+
+    .center {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 2rem 2.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 1.5rem;
+    }
+
+    hr {
+        margin-bottom: 1.5rem;
+        border: 0;
+        border-top: 1px solid #ddd;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    li:last-child {
+        border-bottom: none;
+    }
+
+    li h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #222;
+    }
+
+    li div {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    a {
+        color: #007BFF;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.2s ease;
+    }
+
+    a:hover {
+        color: #0056b3;
+    }
+
+    form {
+        margin: 0;
+    }
+
+    button {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 0.4rem 0.9rem;
+        font-size: 0.9rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+        background-color: #c82333;
+    }
+
+    .empty-message {
+        text-align: center;
+        color: #888;
+        font-size: 1.1rem;
+        margin-top: 2rem;
+    }
+</style>
+</head>
+
+<body>
+    <main>
+        <header>
+            <%- include('../partials/nav', { isLoggedIn: isLoggedIn }) %>
+        </header>
+
+        <div class="center">
+            <h1>Admin Products List</h1>
+            <hr />
+
+            <% if (products.length > 0) { %>
                 <ul>
-                <% if (products.length > 0) { %>
                     <% for (let product of products) { %>
                         <li>
                             <div>
                                 <h2><%= product.title %></h2>
                             </div>
                             <div>
-                                
-                                <a href="/admin/edit-product?productId=<%= product._id  %>">Edit</a>
+                                <a href="/admin/edit-product?productId=<%= product._id %>">Edit</a>
+
                                 <form action="/admin/delete-product" method="post">
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                                     <input type="hidden" name="productId" value="<%= product._id %>" />
@@ -25,10 +134,12 @@
                             </div>
                         </li>
                     <% } %>
-                <% } else { %>
-                    <h2>There's no products...</h2>
-                <% } %>
                 </ul>
-            </div>
-        </main>
-        <%- include('../partials/end') %>
+            <% } else { %>
+                <div class="empty-message">
+                    <h2>There's no products...</h2>
+                </div>
+            <% } %>
+        </div>
+    </main>
+<%- include('../partials/end') %>
