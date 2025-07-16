@@ -90,7 +90,7 @@
                 <p><%= error_msg %></p>
             <% } %>
 
-            <form action="/signup" method="post">
+            <form action="/signup" method="post" novalidate>
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 
                 <input type="email" name="email" placeholder="Email" class="input" required />

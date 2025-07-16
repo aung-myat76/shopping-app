@@ -35,6 +35,18 @@
         color: #007bff;
     }
 
+    button#logout {
+        background-color: #bb2124;
+        color: white;
+        border-radius: 0.4rem;
+        padding: 0.5rem;
+        font-weight: bold;
+    }
+
+    button#logout:hover {
+        opacity: 0.9;
+    }
+
     .active {
         color: #007bff;
         font-weight: 600;
@@ -86,7 +98,7 @@
         <li>
             <form action="/logout" method="POST">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                <button type="submit">Logout</button>
+                <button type="submit" id="logout">Logout</button>
             </form>
         </li>
         <% } else { %>
