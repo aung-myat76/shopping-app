@@ -5,7 +5,7 @@ exports.getAddProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-    Product.find()
+    Product.find({ userId: req.session.user._id })
         .then((products) => {
             res.render("admin/products", {
                 products: products,
