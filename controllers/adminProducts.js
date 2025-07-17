@@ -1,3 +1,5 @@
+const { validationResult } = require("express-validator");
+
 const Product = require("../models/Product");
 
 exports.getAddProduct = (req, res, next) => {
@@ -21,6 +23,13 @@ exports.getProducts = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
     const { title, price, description } = req.body;
+
+    const errors = validationResult(req);
+    console.log(errors.array());
+    if (!errors.isEmpty()) {
+        req.flash("error_msg", errors.array()[0].msg);
+        return res.redirect("/admin/add-product");
+    }
 
     const product = new Product({
         title,
@@ -57,6 +66,19 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.postEditProduct = (req, res, next) => {
     const { productId, title, price, description } = req.body;
+
+    const errors = validationResult(req);
+    console.log(errors.array());
+    if (!errors.isEmpty()) {
+        req.flash("error_msg", errors.array()[0].msg);
+        return res.render("admin/edit-product", {
+            path: "edit-product",
+            product: req.body,
+            error_msg: errors.array()[0].msg,
+            isLoggedIn: req.session.isLoggedIn,
+        });
+    }
+
     Product.findById(productId)
         .then((product) => {
             (product.title = title),
@@ -76,7 +98,9 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
     const { productId } = req.body;
-    Product.findByIdAndDelete(productId).then(() => {
-        res.redirect("/admin/products");
-    });
+    if (confirm("Are you sure to delete this product?")) {
+        Product.findByIdAndDelete(productId).then(() => {
+            res.redirect("/admin/products");
+        });
+    }
 };
