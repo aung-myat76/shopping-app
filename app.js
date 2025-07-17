@@ -9,6 +9,7 @@ const flash = require("connect-flash");
 const sgMail = require("@sendgrid/mail");
 const mongoStore = require("connect-mongodb-session")(session);
 const nodemailer = require("nodemailer");
+const multer = require("multer");
 
 require("dotenv").config(); // To load environment variables from .env
 
@@ -51,8 +52,30 @@ const authRoute = require("./routes/auth");
 
 const User = require("./models/User");
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads/");
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + "_" + file.originalname);
+    },
+});
+
+const fileFilter = (req, file, cb) => {
+    const allowedMimes = ["image/jpeg", "image/jpg", "image/png"];
+
+    if (allowedMimes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+};
+
+app.use(multer({ storage, fileFilter }).single("image"));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(
     session({
         secret: "test",
@@ -80,7 +103,12 @@ app.use("/admin", adminRoute);
 app.use("/", shopRoute);
 app.use("/", authRoute);
 app.use("/", (req, res, next) => {
-    res.render("not-found", { path: "/", isLoggedIn: req.session.isLoggedIn });
+    res.render("error", {
+        path: "/",
+        isLoggedIn: req.session.isLoggedIn,
+        title: "Page not found!",
+        msg: "Cannot find the page with this url",
+    });
 });
 
 mongoose

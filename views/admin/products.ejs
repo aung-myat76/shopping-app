@@ -1,108 +1,90 @@
 <%- include('../partials/head') %>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-    }
+<style>.product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 0;
+    list-style: none;
+}
 
-    main {
-        padding: 2rem;
-    }
+.product-card {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    padding: 1rem;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
 
-    header {
-        margin-bottom: 2rem;
-    }
+.product-card:hover {
+    transform: translateY(-5px);
+}
 
-    .center {
-        max-width: 800px;
-        margin: 0 auto;
-        background-color: #fff;
-        padding: 2rem 2.5rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
-    }
+/* Image Styling */
+.product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 0.8rem;
+}
 
-    h1 {
-        text-align: center;
-        font-size: 2rem;
-        color: #333;
-        margin-bottom: 1.5rem;
-    }
+/* Title */
+.product-card h2 {
+    font-size: 1.1rem;
+    color: #333;
+    margin: 0.5rem 0 1rem 0;
+}
 
-    hr {
-        margin-bottom: 1.5rem;
-        border: 0;
-        border-top: 1px solid #ddd;
-    }
+/* Actions */
+.product-card .actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+}
 
-    ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
+.product-card a {
+    color: #007BFF;
+    text-decoration: none;
+    font-weight: 600;
+}
 
-    li {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem 0;
-        border-bottom: 1px solid #eee;
-    }
+.product-card a:hover {
+    color: #0056b3;
+}
 
-    li:last-child {
-        border-bottom: none;
-    }
+.product-card button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
 
-    li h2 {
-        margin: 0;
-        font-size: 1.2rem;
-        color: #222;
-    }
+.product-card button:hover {
+    background-color: #c82333;
+}
 
-    li div {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
+/* ✅ Responsive widths */
+.product-card {
+    width: 80%; /* default for small screens */
+}
 
-    a {
-        color: #007BFF;
-        text-decoration: none;
-        font-weight: 600;
-        transition: color 0.2s ease;
+@media (min-width: 768px) {
+    .product-card {
+        width: 45%; /* medium screens */
     }
+}
 
-    a:hover {
-        color: #0056b3;
+@media (min-width: 1024px) {
+    .product-card {
+        width: 33%; /* large screens */
     }
-
-    form {
-        margin: 0;
-    }
-
-    button {
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        padding: 0.4rem 0.9rem;
-        font-size: 0.9rem;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
-    }
-
-    button:hover {
-        background-color: #c82333;
-    }
-
-    .empty-message {
-        text-align: center;
-        color: #888;
-        font-size: 1.1rem;
-        margin-top: 2rem;
-    }
+}
 </style>
 </head>
 
@@ -113,19 +95,15 @@
         </header>
 
         <div class="center">
-            <h1>Admin Products List</h1>
-            <hr />
 
             <% if (products.length > 0) { %>
-                <ul>
+                <ul class="product-grid">
                     <% for (let product of products) { %>
-                        <li>
-                            <div>
-                                <h2><%= product.title %></h2>
-                            </div>
-                            <div>
+                        <li class="product-card">
+                            <img src="/<%= product.image %>" alt="<%= product.title %>" />
+                            <h2><%= product.title %></h2>
+                            <div class="actions">
                                 <a href="/admin/edit-product?productId=<%= product._id %>">Edit</a>
-
                                 <form action="/admin/delete-product" method="post">
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                                     <input type="hidden" name="productId" value="<%= product._id %>" />
@@ -135,6 +113,8 @@
                         </li>
                     <% } %>
                 </ul>
+
+
             <% } else { %>
                 <div class="empty-message">
                     <h2>There's no products...</h2>

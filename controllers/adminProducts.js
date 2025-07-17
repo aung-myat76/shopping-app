@@ -22,7 +22,7 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.postAddProduct = (req, res, next) => {
-    const { title, price, description } = req.body;
+    const { title, image, price, description } = req.body;
 
     const errors = validationResult(req);
     console.log(errors.array());
@@ -31,8 +31,13 @@ exports.postAddProduct = (req, res, next) => {
         return res.redirect("/admin/add-product");
     }
 
+    const imageUrl = req.file;
+
+    console.log(imageUrl);
+
     const product = new Product({
         title,
+        image: imageUrl.path,
         price,
         description,
         userId: req.session.user,
@@ -65,7 +70,15 @@ exports.getEditProduct = (req, res, next) => {
 };
 
 exports.postEditProduct = (req, res, next) => {
-    const { productId, title, price, description } = req.body;
+    const { productId, image, title, price, description } = req.body;
+
+    let imageUrl = req.file || {};
+
+    if (!req.file) {
+        imageUrl.path = image;
+    }
+
+    console.log(imageUrl);
 
     const errors = validationResult(req);
     console.log(errors.array());
@@ -82,6 +95,7 @@ exports.postEditProduct = (req, res, next) => {
     Product.findById(productId)
         .then((product) => {
             (product.title = title),
+                (product.image = imageUrl.path ? imageUrl.path : product.image),
                 (product.price = price),
                 (product.description = description);
 

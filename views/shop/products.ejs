@@ -1,103 +1,141 @@
 <%- include('../partials/head') %>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f9f9f9;
-    }
+<style>body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
 
-    main {
-        padding: 2rem;
-    }
+main {
+    padding: 2rem;
+}
 
-    header {
-        margin-bottom: 2rem;
-    }
+header {
+    margin-bottom: 2rem;
+}
 
-    .center {
-        max-width: 900px;
-        margin: 0 auto;
-        background-color: #fff;
-        padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    }
+.center {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
 
-    h1 {
-        margin-bottom: 1rem;
-        font-size: 2rem;
-        text-align: center;
-        color: #333;
-    }
+h1 {
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    text-align: center;
+    color: #333;
+}
 
-    hr {
-        margin-bottom: 2rem;
-    }
+hr {
+    margin-bottom: 2rem;
+}
 
-    ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
+/* ✅ GRID Layout */
+.product-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+}
 
-    li {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #eee;
-        padding: 1rem 0;
-    }
+.product-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    padding: 1rem;
+    transition: transform 0.2s ease;
+    width: 80%; /* default for small screens */
+}
 
-    li:last-child {
-        border-bottom: none;
-    }
+.product-card:hover {
+    transform: translateY(-5px);
+}
 
-    li h2 {
-        margin: 0 0 0.3rem;
-        font-size: 1.25rem;
-        color: #222;
-    }
+/* ✅ Image styling */
+.product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 0.8rem;
+}
 
-    li strong {
-        color: #007BFF;
-        font-size: 1.1rem;
-    }
+.product-card h2 {
+    margin: 0.5rem 0 0.3rem;
+    font-size: 1.25rem;
+    color: #222;
+}
 
-    li a {
-        text-decoration: none;
-        color: #007BFF;
-        margin-right: 1rem;
-    }
+.product-card strong {
+    display: block;
+    color: #007BFF;
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+}
 
-    li a:hover {
-        text-decoration: underline;
-    }
+/* ✅ Actions */
+.product-card .actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+}
 
-    li form {
-        display: inline;
-    }
+.product-card a {
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: 600;
+}
 
-    li button {
-        background-color: #28a745;
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
-    }
+.product-card a:hover {
+    text-decoration: underline;
+}
 
-    li button:hover {
-        background-color: #218838;
-    }
+.product-card form {
+    display: inline;
+}
 
-    h2 {
-        text-align: center;
-        color: #666;
-        margin-top: 2rem;
+.product-card button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.product-card button:hover {
+    background-color: #218838;
+}
+
+/* ✅ Responsive widths */
+@media (min-width: 768px) {
+    .product-card {
+        width: 45%;
     }
+}
+
+@media (min-width: 1024px) {
+    .product-card {
+        width: 33%;
+    }
+}
+
+.empty {
+    text-align: center;
+    color: #666;
+    margin-top: 2rem;
+}
 </style>
 </head>
 
@@ -108,18 +146,15 @@
         </header>
 
         <div class="center">
-            <h1>Products List</h1>
-            <hr>
-
-            <ul>
-                <% if (products.length > 0) { %>
+            
+            <% if (products.length > 0) { %>
+                <ul class="product-grid">
                     <% for (let product of products) { %>
-                        <li>
-                            <div>
-                                <h2><%= product.title %></h2>
-                                <strong>$<%= product.price.toFixed(2) %></strong>
-                            </div>
-                            <div>
+                        <li class="product-card">
+                            <img src="/<%= product.image %>" alt="<%= product.title %>">
+                            <h2><%= product.title %></h2>
+                            <strong>$<%= product.price.toFixed(2) %></strong>
+                            <div class="actions">
                                 <a href="/products/<%= product._id %>">Detail</a>
                                 <% if (isLoggedIn) { %>
                                     <form action="/add-cart" method="post">
@@ -131,10 +166,15 @@
                             </div>
                         </li>
                     <% } %>
-                <% } else { %>
-                    <h2>There's no products...</h2>
-                <% } %>
-            </ul>
+                </ul>
+            <% } else { %>
+                <h2 class="empty">There's no products...</h2>
+            <% } %>
         </div>
+
     </main>
     <%- include('../partials/end') %>
+
+
+
+

@@ -15,6 +15,7 @@ router.post(
         body("email")
             .isEmail()
             .withMessage("Your email is incorrect")
+            .normalizeEmail()
             .custom((value, { req }) => {
                 return User.findOne({ email: value }).then((user) => {
                     if (!user) {
@@ -24,8 +25,9 @@ router.post(
                     }
                 });
             }),
-        body("password", "Your password is incorrect").custom(
-            (value, { req }) => {
+        body("password", "Your password is incorrect")
+            .trim()
+            .custom((value, { req }) => {
                 return User.findOne({ email: req.body.email }).then((user) => {
                     if (!user) {
                         return Promise.reject(
@@ -46,8 +48,7 @@ router.post(
                             req.session.user = user;
                         });
                 });
-            }
-        ),
+            }),
     ],
     authControlller.postLogin
 );
@@ -60,6 +61,7 @@ router.post(
         check("email")
             .isEmail()
             .withMessage("Your email is incorrect")
+            .normalizeEmail()
             .custom((value, { req }) => {
                 return User.findOne({ email: value }).then((user) => {
                     if (user) {
@@ -71,14 +73,17 @@ router.post(
             }),
         body("password")
             .isLength({ min: 6 })
-            .withMessage("Your password must be at least 6 characters long"),
-        body("confirmedPassword").custom((value, { req }) => {
-            if (value !== req.body.password) {
-                throw new Error("Your passwords must be match");
-            }
+            .withMessage("Your password must be at least 6 characters long")
+            .trim(),
+        body("confirmedPassword")
+            .trim()
+            .custom((value, { req }) => {
+                if (value !== req.body.password) {
+                    throw new Error("Your passwords must be match");
+                }
 
-            return true;
-        }),
+                return true;
+            }),
     ],
     authControlller.postSignup
 );
