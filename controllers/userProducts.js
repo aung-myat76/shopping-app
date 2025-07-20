@@ -1,3 +1,6 @@
+const fs = require("fs");
+const path = require("path");
+
 const Order = require("../models/Order");
 const User = require("../models/User");
 const Product = require("../models/Product");
@@ -117,6 +120,48 @@ exports.postOrder = (req, res, next) => {
             res.redirect("/order");
         })
         .catch((err) => next(err));
+};
+
+exports.getOrderDetail = (req, res, next) => {
+    const { orderId } = req.params;
+
+    Order.findById(orderId)
+        .then((order) => {
+            if (
+                order.user.userId.toString() !== req.session.user._id.toString()
+            ) {
+                console.log("not found");
+
+                return res.send("Not found the invoice pdf");
+            }
+
+            const invoicePath = path.join(
+                __dirname,
+                "..",
+                "data",
+                "invoices",
+                "invoice_" + orderId + ".pdf"
+            );
+
+            console.log(invoicePath);
+
+            if (!fs.existsSync(invoicePath)) {
+                return res.status(404).send("Invoice not found.");
+            }
+
+            fs.readFile(invoicePath, (err, data) => {
+                res.setHeader("Content-Type", "application/pdf");
+                res.setHeader(
+                    "Content-Disposition",
+                    "inline; filename=invoice_" + orderId + ".pdf"
+                );
+
+                return res.send(data);
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
 exports.getProductDetail = (req, res, next) => {

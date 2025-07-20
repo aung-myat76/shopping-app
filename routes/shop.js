@@ -17,6 +17,8 @@ router.post("/add-cart", isAuth, userProductsControllers.postAddCart);
 
 router.get("/order", isAuth, userProductsControllers.getOrder);
 
+router.get("/order/:orderId", isAuth, userProductsControllers.getOrderDetail);
+
 router.post("/add-order", isAuth, userProductsControllers.postOrder);
 
 router.post("/delete-cart", isAuth, userProductsControllers.postDeleteCart);

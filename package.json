@@ -23,7 +23,7 @@
     "version": "1.0.0",
     "main": "app.js",
     "scripts": {
-        "server": "nodemon --watch  app.js",
+        "server": "nodemon app.js --ext js,ejs --watch .",
         "build:css": "npx tailwindcss -i ./public/css/tailwind.css -o ./public/css/main.css --watch"
     },
     "author": "",
