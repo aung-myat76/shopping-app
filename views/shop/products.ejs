@@ -167,9 +167,11 @@ hr {
                         </li>
                     <% } %>
                 </ul>
+                <%- include('../partials/pagination', {currentPage, nextPage, previousPage, hasNextPage, hasPreviousPage}) %>
             <% } else { %>
                 <h2 class="empty">There's no products...</h2>
             <% } %>
+
         </div>
 
     </main>

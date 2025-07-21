@@ -7,14 +7,31 @@ const Order = require("../models/Order");
 const User = require("../models/User");
 const Product = require("../models/Product");
 
+const PRODUCT_PER_PAGE = 1;
+
 exports.getProducts = (req, res, next) => {
-    Product.find().then((products) => {
-        res.render("shop/products", {
-            products: products,
-            path: "/",
-            isLoggedIn: req.session.isLoggedIn,
+    const page = +req.query.page || 1;
+
+    Product.find()
+        .countDocuments()
+        .then((pages) => {
+            return Product.find()
+                .skip((page - 1) * PRODUCT_PER_PAGE)
+                .limit(PRODUCT_PER_PAGE)
+                .then((products) => {
+                    res.render("shop/products", {
+                        products: products,
+                        path: "/",
+                        isLoggedIn: req.session.isLoggedIn,
+                        currentPage: page,
+                        nextPage: page + 1,
+                        previousPage: page - 1,
+                        lastPage: Math.ceil(pages / PRODUCT_PER_PAGE),
+                        hasNextPage: pages > page * PRODUCT_PER_PAGE,
+                        hasPreviousPage: page !== 1,
+                    });
+                });
         });
-    });
 };
 
 exports.getCart = (req, res, next) => {
