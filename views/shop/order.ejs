@@ -16,7 +16,7 @@
     }
 
     .center {
-        max-width: 800px;
+        max-width: 850px;
         margin: 0 auto;
         background-color: #fff;
         padding: 2rem 2.5rem;
@@ -31,43 +31,74 @@
         margin-bottom: 1.5rem;
     }
 
-    ul {
-        list-style: none;
-        padding: 0;
+    .order-card {
+        background: #fafafa;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 1.2rem 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+        transition: all 0.2s ease-in-out;
+    }
+
+    .order-card:hover {
+        background: #fefefe;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.8rem;
+    }
+
+    .order-header h2 {
+        font-size: 1.1rem;
+        color: #333;
         margin: 0;
     }
 
-    li {
-        border-bottom: 1px solid #ddd;
-        padding: 1.5rem 0;
-    }
-
-    li:last-child {
-        border-bottom: none;
-    }
-
-    li h2 {
-        font-size: 1.1rem;
-        margin: 0.3rem 0;
-        color: #333;
-    }
-
-    li p {
-        color: #555;
-        margin: 0.2rem 0 1rem;
-        font-size: 0.95rem;
-    }
-
-    li strong {
+    .download-btn {
         display: inline-block;
-        margin-right: 1rem;
-        font-weight: 600;
-        color: #007BFF;
+        padding: 0.3rem 0.7rem;
+        background: #007BFF;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        transition: background 0.2s ease-in-out;
+    }
+
+    .download-btn:hover {
+        background: #0056b3;
+    }
+
+    .order-info {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 0.6rem;
     }
 
     .product {
-        margin-left: 1rem;
-        padding: 0.25rem 0;
+        border-top: 1px solid #eee;
+        padding-top: 0.6rem;
+        margin-top: 0.6rem;
+    }
+
+    .product h3 {
+        font-size: 1rem;
+        color: #333;
+        margin: 0 0 0.3rem;
+    }
+
+    .product-details {
+        font-size: 0.9rem;
+        color: #555;
+    }
+
+    .product-details strong {
+        color: #007BFF;
     }
 
     .empty-message {
@@ -86,33 +117,36 @@
         </header>
 
         <div class="center">
-            <h1>Order List</h1>
+            <h1>My Orders</h1>
             <hr />
 
-            <ul>
-                <% if (orders.length > 0) { %>
-                    <% for (let order of orders) { %>
-                        <li>
+            <% if (orders.length > 0) { %>
+                <% for (let order of orders) { %>
+                    <div class="order-card">
+                        <div class="order-header">
                             <h2>Order ID: <%= order._id %></h2>
-                            <a href="/order/<%= order._id %>">Invoice</a>
-                            <p>Ordered By: <%= order.user.email %></p>
+                            <a class="download-btn" href="/order/<%= order._id %>">
+                                Download Invoice
+                            </a>
+                        </div>
+                        <p class="order-info">Ordered By: <%= order.user.email %></p>
 
-                            <% for (let product of order.products) { %>
-                                <div class="product">
-                                    <h2><%= product.product.title %></h2>
-                                    <strong>Price: $<%= product.product.price.toFixed(2) %></strong>
-                                    <strong>Qty: <%= product.qty %></strong>
-                                    
+                        <% for (let product of order.products) { %>
+                            <div class="product">
+                                <h3><%= product.product.title %></h3>
+                                <div class="product-details">
+                                    <strong>Price:</strong> $<%= product.product.price.toFixed(2) %> &nbsp;|&nbsp;
+                                    <strong>Qty:</strong> <%= product.qty %>
                                 </div>
-                            <% } %>
-                        </li>
-                    <% } %>
-                <% } else { %>
-                    <div class="empty-message">
-                        <h2>There's nothing in order...</h2>
+                            </div>
+                        <% } %>
                     </div>
                 <% } %>
-            </ul>
+            <% } else { %>
+                <div class="empty-message">
+                    <h2>There's nothing in your orders...</h2>
+                </div>
+            <% } %>
         </div>
     </main>
 

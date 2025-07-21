@@ -1,28 +1,64 @@
 <%- include('../partials/head') %>
-<style>.product-grid {
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+main {
+    padding: 2rem;
+}
+
+header {
+    margin-bottom: 2rem;
+}
+
+.center {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+h1 {
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    text-align: center;
+    color: #333;
+}
+
+hr {
+    margin-bottom: 2rem;
+}
+
+/* ✅ GRID Layout */
+.product-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 1.5rem;
-    padding: 0;
-    list-style: none;
 }
 
 .product-card {
-    background-color: #fff;
+    background: #fff;
     border: 1px solid #eee;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
-    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     text-align: center;
+    padding: 1rem;
     transition: transform 0.2s ease;
+    width: 80%;
 }
 
 .product-card:hover {
     transform: translateY(-5px);
 }
 
-/* Image Styling */
+/* ✅ Image styling */
 .product-card img {
     width: 100%;
     height: 180px;
@@ -31,61 +67,82 @@
     margin-bottom: 0.8rem;
 }
 
-/* Title */
 .product-card h2 {
-    font-size: 1.1rem;
-    color: #333;
-    margin: 0.5rem 0 1rem 0;
+    margin: 0.5rem 0 0.3rem;
+    font-size: 1.25rem;
+    color: #222;
 }
 
-/* Actions */
+.product-card strong {
+    display: block;
+    color: #007BFF;
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+}
+
+/* ✅ Actions (Unified Buttons) */
 .product-card .actions {
     display: flex;
     justify-content: center;
-    gap: 0.8rem;
+    gap: 0.6rem;
 }
 
-.product-card a {
-    color: #007BFF;
-    text-decoration: none;
+/* Make Edit link look like a button */
+.product-card .actions a,
+.product-card .actions button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 90px;
+    height: 36px;
+    font-size: 0.85rem;
     font-weight: 600;
-}
-
-.product-card a:hover {
-    color: #0056b3;
-}
-
-.product-card button {
-    background-color: #dc3545;
-    color: white;
+    border-radius: 6px;
+    color: #fff;
+    text-decoration: none;
     border: none;
-    padding: 0.4rem 0.8rem;
-    border-radius: 5px;
     cursor: pointer;
-    font-size: 0.9rem;
+    transition: background-color 0.2s ease-in-out;
 }
 
-.product-card button:hover {
-    background-color: #c82333;
+/* ✅ Edit Button (Blue) */
+.product-card .actions a {
+    background-color: #007BFF;
+}
+
+.product-card .actions a:hover {
+    background-color: #0056b3;
+}
+
+/* ✅ Delete Button (Red) */
+.product-card .actions button {
+    background-color: #dc3545;
+}
+
+.product-card .actions button:hover {
+    background-color: #b52a38;
 }
 
 /* ✅ Responsive widths */
-.product-card {
-    width: 80%; /* default for small screens */
-}
-
 @media (min-width: 768px) {
     .product-card {
-        width: 45%; /* medium screens */
+        width: 45%;
     }
 }
 
 @media (min-width: 1024px) {
     .product-card {
-        width: 33%; /* large screens */
+        width: 30%;
     }
 }
+
+.empty {
+    text-align: center;
+    color: #666;
+    margin-top: 2rem;
+}
 </style>
+
 </head>
 
 <body>
@@ -95,13 +152,14 @@
         </header>
 
         <div class="center">
-
+            
             <% if (products.length > 0) { %>
                 <ul class="product-grid">
                     <% for (let product of products) { %>
                         <li class="product-card">
-                            <img src="/<%= product.image %>" alt="<%= product.title %>" />
+                            <img src="/<%= product.image %>" alt="<%= product.title %>">
                             <h2><%= product.title %></h2>
+                            <strong>$<%= product.price.toFixed(2) %></strong>
                             <div class="actions">
                                 <a href="/admin/edit-product?productId=<%= product._id %>">Edit</a>
                                 <form action="/admin/delete-product" method="post">
@@ -113,13 +171,17 @@
                         </li>
                     <% } %>
                 </ul>
-
-
+                <%- include('../partials/pagination', {currentPage, nextPage, previousPage, hasNextPage, hasPreviousPage}) %>
             <% } else { %>
-                <div class="empty-message">
-                    <h2>There's no products...</h2>
-                </div>
+                <h2 class="empty">There's no products...</h2>
             <% } %>
+
         </div>
+
     </main>
 <%- include('../partials/end') %>
+
+
+
+
+

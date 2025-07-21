@@ -1,21 +1,58 @@
 <style>
-    .active {
-        color: green;
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 2rem 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .pagination a {
+        display: inline-block;
+        padding: 0.5rem 0.9rem;
+        text-decoration: none;
+        color: #333;
+        background: #f1f1f1;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        transition: all 0.2s ease-in-out;
+        font-size: 14px;
+    }
+
+    .pagination a:hover {
+        background: #e6e6e6;
+        border-color: #ccc;
+    }
+
+    .pagination .current-page {
+        background: #28a745; /* Green shop theme */
+        color: #fff;
+        font-weight: bold;
+        border-color: #28a745;
+        cursor: default;
+    }
+
+    .pagination .current-page:hover {
+        background: #28a745;
     }
 </style>
 
-<div>
+<div class="pagination">
     <% if (currentPage !== 1) { %>
     <a href="?page=1">1</a>
     <% } %> <% if (hasPreviousPage && (currentPage - 1) !== 1) { %>
     <a href="?page=<%= previousPage %>"><%= previousPage %></a>
     <% } %>
-    <a href="?page=<%= currentPage %>" class="active"><%= currentPage %></a>
+
+    <a href="?page=<%= currentPage %>" class="current-page">
+        <%= currentPage %>
+    </a>
 
     <% if (hasNextPage) { %>
     <a href="?page=<%= nextPage %>"><%= nextPage %></a>
     <% } %> <% if (lastPage !== 1 && lastPage !== nextPage && currentPage !==
-    lastPage ) { %>
+    lastPage) { %>
     <a href="?page=<%= lastPage %>"><%= lastPage %></a>
     <% } %>
 </div>

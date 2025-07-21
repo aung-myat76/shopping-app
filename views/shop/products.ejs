@@ -1,5 +1,6 @@
 <%- include('../partials/head') %>
-<style>body {
+<style>
+body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -17,10 +18,7 @@ header {
 .center {
     max-width: 1200px;
     margin: 0 auto;
-    background-color: #fff;
     padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 h1 {
@@ -48,16 +46,17 @@ hr {
 .product-card {
     background: #fff;
     border: 1px solid #eee;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     text-align: center;
-    padding: 1rem;
-    transition: transform 0.2s ease;
+    padding: 1.2rem 1rem;
+    transition: all 0.25s ease-in-out;
     width: 80%; /* default for small screens */
 }
 
 .product-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
 }
 
 /* ✅ Image styling */
@@ -71,52 +70,60 @@ hr {
 
 .product-card h2 {
     margin: 0.5rem 0 0.3rem;
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     color: #222;
+    font-weight: 600;
 }
 
 .product-card strong {
     display: block;
-    color: #007BFF;
+    color: #28a745;
     font-size: 1.1rem;
-    margin-bottom: 0.8rem;
+    margin-bottom: 1rem;
 }
 
-/* ✅ Actions */
+/* ✅ Actions Container */
 .product-card .actions {
     display: flex;
     justify-content: center;
-    gap: 0.8rem;
+    gap: 0.6rem;
 }
 
-.product-card a {
-    text-decoration: none;
-    color: #007BFF;
+/* ✅ Common Button Style (applies to both <a> and <button>) */
+.product-card .actions a,
+.product-card .actions button {
+    display: inline-flex; /* makes text perfectly centered */
+    justify-content: center;
+    align-items: center;
+    width: 110px; /* fixed equal width */
+    height: 36px; /* fixed equal height */
+    background-color: #007BFF; /* Default (Detail) */
+    color: #fff;
+    font-size: 0.85rem;
     font-weight: 600;
-}
-
-.product-card a:hover {
-    text-decoration: underline;
-}
-
-.product-card form {
-    display: inline;
-}
-
-.product-card button {
-    background-color: #28a745;
-    color: white;
+    text-decoration: none;
     border: none;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    border-radius: 4px;
+    border-radius: 20px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease-in-out;
+    box-sizing: border-box;
 }
 
-.product-card button:hover {
+/* ✅ Hover effect */
+.product-card .actions a:hover,
+.product-card .actions button:hover {
+    opacity: 0.9;
+}
+
+/* ✅ Specific Add-to-Cart Color */
+.product-card .actions button {
+    background-color: #28a745;
+}
+
+.product-card .actions button:hover {
     background-color: #218838;
 }
+
 
 /* ✅ Responsive widths */
 @media (min-width: 768px) {
@@ -127,7 +134,7 @@ hr {
 
 @media (min-width: 1024px) {
     .product-card {
-        width: 33%;
+        width: 30%;
     }
 }
 
@@ -137,6 +144,7 @@ hr {
     margin-top: 2rem;
 }
 </style>
+
 </head>
 
 <body>

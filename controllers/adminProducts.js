@@ -3,18 +3,42 @@ const { validationResult } = require("express-validator");
 const Product = require("../models/Product");
 const { deleteFile } = require("../ultil/file");
 
+const PRODUCT_PER_PAGE = 2;
+
 exports.getAddProduct = (req, res, next) => {
     res.render("admin/add-product", { path: "/admin/add-product" });
 };
 
 exports.getProducts = (req, res, next) => {
+    // Product.find({ userId: req.session.user._id })
+    //     .then((products) => {
+    //         res.render("admin/products", {
+    //             products: products,
+    //             path: "/admin/products",
+    //             isLoggedIn: req.session.isLoggedIn,
+    //         });
+    //     })
+    const page = +req.query.page || 1;
+
     Product.find({ userId: req.session.user._id })
-        .then((products) => {
-            res.render("admin/products", {
-                products: products,
-                path: "/admin/products",
-                isLoggedIn: req.session.isLoggedIn,
-            });
+        .countDocuments()
+        .then((pages) => {
+            return Product.find({ userId: req.session.user._id })
+                .skip((page - 1) * PRODUCT_PER_PAGE)
+                .limit(PRODUCT_PER_PAGE)
+                .then((products) => {
+                    res.render("admin/products", {
+                        products: products,
+                        path: "/admin/products",
+                        isLoggedIn: req.session.isLoggedIn,
+                        currentPage: page,
+                        nextPage: page + 1,
+                        previousPage: page - 1,
+                        lastPage: Math.ceil(pages / PRODUCT_PER_PAGE),
+                        hasNextPage: pages > page * PRODUCT_PER_PAGE,
+                        hasPreviousPage: page !== 1,
+                    });
+                });
         })
         .catch((err) => {
             console.log(err);

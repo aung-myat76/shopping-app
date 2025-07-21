@@ -7,7 +7,7 @@ const Order = require("../models/Order");
 const User = require("../models/User");
 const Product = require("../models/Product");
 
-const PRODUCT_PER_PAGE = 1;
+const PRODUCT_PER_PAGE = 2;
 
 exports.getProducts = (req, res, next) => {
     const page = +req.query.page || 1;
