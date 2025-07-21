@@ -94,6 +94,7 @@
                     <% for (let order of orders) { %>
                         <li>
                             <h2>Order ID: <%= order._id %></h2>
+                            <a href="/order/<%= order._id %>">Invoice</a>
                             <p>Ordered By: <%= order.user.email %></p>
 
                             <% for (let product of order.products) { %>
@@ -101,7 +102,7 @@
                                     <h2><%= product.product.title %></h2>
                                     <strong>Price: $<%= product.product.price.toFixed(2) %></strong>
                                     <strong>Qty: <%= product.qty %></strong>
-                                    <a href="/order/<%= order._id %>">Invoice</a>
+                                    
                                 </div>
                             <% } %>
                         </li>

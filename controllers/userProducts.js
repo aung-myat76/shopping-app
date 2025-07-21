@@ -1,6 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 
+const PDF = require("pdfkit");
+
 const Order = require("../models/Order");
 const User = require("../models/User");
 const Product = require("../models/Product");
@@ -135,29 +137,87 @@ exports.getOrderDetail = (req, res, next) => {
                 return res.send("Not found the invoice pdf");
             }
 
-            const invoicePath = path.join(
-                __dirname,
-                "..",
-                "data",
-                "invoices",
-                "invoice_" + orderId + ".pdf"
+            // if (!fs.existsSync(invoicePath)) {
+            //     return res.status(404).send("Invoice not found.");
+            // }
+
+            // fs.readFile(invoicePath, (err, data) => {
+            //     res.setHeader("Content-Type", "application/pdf");
+            //     res.setHeader(
+            //         "Content-Disposition",
+            //         "inline; filename=invoice_" + orderId + ".pdf"
+            //     );
+
+            //     return res.send(data);
+            // });
+
+            const pdf = new PDF({ margin: 50 });
+
+            pdf.pipe(fs.createWriteStream(`invoice_${order._id}.pdf`));
+            pdf.pipe(res);
+            res.setHeader("Content-Type", "application/pdf");
+            res.setHeader(
+                "Content-Disposition",
+                "inline; filename=invoice_" + orderId + ".pdf"
             );
 
-            console.log(invoicePath);
+            pdf.fontSize(22)
+                .fillColor("#333")
+                .text("INVOICE", { underline: true, align: "center" });
 
-            if (!fs.existsSync(invoicePath)) {
-                return res.status(404).send("Invoice not found.");
-            }
+            pdf.moveDown(); // Add some spacing
 
-            fs.readFile(invoicePath, (err, data) => {
-                res.setHeader("Content-Type", "application/pdf");
-                res.setHeader(
-                    "Content-Disposition",
-                    "inline; filename=invoice_" + orderId + ".pdf"
+            pdf.fontSize(14)
+                .fillColor("#666")
+                .text("Order Summary", { align: "left" });
+            pdf.moveDown();
+
+            pdf.text("------------------------------------------");
+
+            let totalPrice = 0;
+
+            // Better formatting for products
+            order.products.forEach(({ product, qty }) => {
+                const lineTotal = product.price * qty;
+                totalPrice += lineTotal;
+
+                pdf.fillColor("#000").fontSize(12).text(
+                    `${product.title}  |  $${product.price} x ${qty}  =  $${lineTotal}`,
+                    { indent: 20 } // Indent a little
                 );
-
-                return res.send(data);
             });
+
+            pdf.text("------------------------------------------");
+            pdf.moveDown();
+
+            // Highlight total price
+            pdf.fontSize(16)
+                .fillColor("#000")
+                .text(`Total Price: $${totalPrice}`, {
+                    align: "right",
+                    underline: true,
+                });
+
+            pdf.end();
+
+            //     pdf.fontSize(22).text("Invoice", {
+            //         underline: true,
+            //     });
+
+            //     pdf.text("------------------------------------------");
+
+            //     let totalPrice = 0;
+            //     order.products.forEach(({ product, qty }) => {
+            //         totalPrice += product.price * qty;
+            //         pdf.text(
+            //             `${product.title} - $${product.price} x ${qty} > ${
+            //                 product.price * qty
+            //             }`
+            //         );
+            //     });
+
+            //     pdf.fontSize(21).text(totalPrice)
+            //     pdf.end();
         })
         .catch((err) => {
             console.log(err);

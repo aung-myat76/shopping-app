@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 
 const Product = require("../models/Product");
+const { deleteFile } = require("../ultil/file");
 
 exports.getAddProduct = (req, res, next) => {
     res.render("admin/add-product", { path: "/admin/add-product" });
@@ -76,6 +77,8 @@ exports.postEditProduct = (req, res, next) => {
 
     if (!req.file) {
         imageUrl.path = image;
+    } else {
+        deleteFile(image);
     }
 
     console.log(imageUrl);
@@ -112,9 +115,9 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
     const { productId } = req.body;
-    if (confirm("Are you sure to delete this product?")) {
-        Product.findByIdAndDelete(productId).then(() => {
-            res.redirect("/admin/products");
-        });
-    }
+
+    Product.findByIdAndDelete(productId).then((product) => {
+        deleteFile(product.image);
+        res.redirect("/admin/products");
+    });
 };
