@@ -3,7 +3,7 @@ const { validationResult } = require("express-validator");
 const Product = require("../models/Product");
 const { deleteFile } = require("../ultil/file");
 
-const PRODUCT_PER_PAGE = 2;
+const PRODUCT_PER_PAGE = 1;
 
 exports.getAddProduct = (req, res, next) => {
     res.render("admin/add-product", { path: "/admin/add-product" });
@@ -137,11 +137,16 @@ exports.postEditProduct = (req, res, next) => {
         });
 };
 
-exports.postDeleteProduct = (req, res, next) => {
-    const { productId } = req.body;
+exports.deleteProduct = (req, res, next) => {
+    const { productId } = req.params;
 
-    Product.findByIdAndDelete(productId).then((product) => {
-        deleteFile(product.image);
-        res.redirect("/admin/products");
-    });
+    Product.findByIdAndDelete(productId)
+        .then((product) => {
+            deleteFile(product.image);
+            res.status(200).json({ msg: "success" });
+            // res.redirect("/admin/products");
+        })
+        .catch((err) => {
+            res.status(500).json({ msg: err.message });
+        });
 };

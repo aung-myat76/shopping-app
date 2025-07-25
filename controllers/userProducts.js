@@ -125,12 +125,27 @@ exports.postOrder = (req, res, next) => {
                 return { product: p.productId._doc, qty: p.qty };
             });
 
+            const myanmarDate = new Date().toLocaleString("en-GB", {
+                timeZone: "Asia/Yangon", // ✅ Myanmar Timezone
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+            });
+
+            console.log(myanmarDate);
+
+            console.log(myanmarDate);
+
             const order = new Order({
                 products: products,
                 user: {
                     email: user.email, // or user.name if you have it
                     userId: user._id,
                 },
+                orderDate: myanmarDate,
             });
 
             return order.save().then(() => user.clearCart());

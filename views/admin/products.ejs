@@ -162,11 +162,9 @@ hr {
                             <strong>$<%= product.price.toFixed(2) %></strong>
                             <div class="actions">
                                 <a href="/admin/edit-product?productId=<%= product._id %>">Edit</a>
-                                <form action="/admin/delete-product" method="post">
-                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                                    <input type="hidden" name="productId" value="<%= product._id %>" />
-                                    <button type="submit">Delete</button>
-                                </form>
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                                <input type="hidden" name="productId" value="<%= product._id %>" />
+                                <button type="button" onclick="deleteProduct(this, '<%= currentPage %>')">Delete</button>
                             </div>
                         </li>
                     <% } %>
@@ -179,6 +177,7 @@ hr {
         </div>
 
     </main>
+    <script src="/js/admin.js"></script>
 <%- include('../partials/end') %>
 
 

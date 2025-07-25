@@ -6,37 +6,33 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-family: sans-serif;
         position: relative;
-        z-index: 10;
+        z-index: 20;
     }
 
-    nav ul {
-        list-style: none;
+    /* Always visible (right side) */
+    .nav-fixed-right {
         display: flex;
-        gap: 1.5rem;
-        padding: 0;
-        margin: 0;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
     }
 
-    nav a,
-    nav button {
+    .nav-fixed-right form {
+        margin-bottom: 0;
+    }
+
+    .nav-fixed-right a,
+    .nav-fixed-right button {
         text-decoration: none;
         color: #333;
         font-weight: 500;
-        border: none;
         background: none;
+        border: none;
         cursor: pointer;
-        font-size: 1rem;
-        transition: color 0.3s, border-bottom 0.3s;
-        padding-bottom: 2px;
     }
 
-    nav a:hover,
-    nav button:hover {
-        color: #007bff;
-    }
-
+    /* Logout button styling */
     button#logout {
         background-color: #bb2124;
         color: white;
@@ -44,22 +40,11 @@
         padding: 0.5rem 1rem;
         font-weight: bold;
     }
-
     button#logout:hover {
         opacity: 0.9;
     }
 
-    .active {
-        color: #007bff;
-        font-weight: 600;
-        border-bottom: 2px solid #007bff;
-    }
-
-    form {
-        display: inline;
-    }
-
-    /* ✅ HAMBURGER MENU */
+    /* ✅ Hamburger */
     .hamburger {
         display: none;
         flex-direction: column;
@@ -67,101 +52,146 @@
         width: 28px;
         height: 20px;
         cursor: pointer;
+        z-index: 30; /* higher than overlay */
     }
-
     .hamburger span {
-        display: block;
         height: 3px;
-        background-color: #333;
+        background: #333;
         border-radius: 2px;
         transition: 0.3s ease;
     }
 
-    /* ✅ Mobile Styles */
+    /* ✅ Overlay Menu */
+    .nav-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.97);
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 25;
+        opacity: 0.9;
+    }
+    .nav-overlay.show {
+        display: flex;
+    }
+    .nav-overlay ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .nav-overlay li {
+        margin: 1rem auto;
+    }
+    .nav-overlay a {
+        font-size: 1.5rem;
+        color: #333;
+        text-decoration: none;
+        transition: color 0.3s;
+        display: inline-block;
+        width: auto; /* or 100% if you want full width clickable */
+        text-align: center;
+    }
+    .nav-overlay a:hover,
+    .nav-fixed-right a:hover {
+        color: #007bff;
+    }
+
+    /* ✅ Mobile Only */
     @media (max-width: 768px) {
         .hamburger {
             display: flex;
         }
-
-        nav {
-            flex-wrap: wrap;
-        }
-
-        nav ul {
-            flex-direction: column;
-            width: 100%;
-            background: #fff;
-            padding: 1rem;
-            display: none;
-            border-top: 1px solid #eee;
-        }
-
-        nav ul.show {
-            display: flex;
-        }
     }
 </style>
+
 <nav>
-    <!-- ✅ Hamburger Menu (mobile only) -->
+    <!-- ✅ Hamburger Menu (mobile only, left side) -->
     <div class="hamburger" id="menu-toggle">
         <span></span>
         <span></span>
         <span></span>
     </div>
 
-    <!-- Left: Navigation Links -->
-    <ul id="nav-links">
-        <li>
-            <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
-        </li>
-        <% if (isLoggedIn) { %>
-        <li>
-            <a href="/cart" class="<%= path === '/cart' ? 'active' : '' %>"
-                >Cart</a
-            >
-        </li>
-        <li>
-            <a href="/order" class="<%= path === '/order' ? 'active' : '' %>"
-                >Order</a
-            >
-        </li>
-        <li>
-            <a
-                href="/admin/add-product"
-                class="<%= path === '/admin/add-product' ? 'active' : '' %>"
-                >Add Item</a
-            >
-        </li>
-        <li>
-            <a
-                href="/admin/products"
-                class="<%= path === '/admin/products' ? 'active' : '' %>"
-                >Admin Products</a
-            >
-        </li>
-        <% } %>
-    </ul>
+    <!-- ✅ Always visible (Home + Logout) -->
+    <div class="nav-fixed-right">
+        <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
 
-    <!-- Right: Auth Controls -->
-    <ul id="auth-links">
         <% if (isLoggedIn) { %>
-        <li>
-            <form action="/logout" method="POST">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                <button type="submit" id="logout">Logout</button>
-            </form>
-        </li>
+        <form action="/logout" method="POST" style="display: inline">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <button type="submit" id="logout">Logout</button>
+        </form>
         <% } else { %>
-        <li>
-            <a href="/login" class="<%= path === '/login' ? 'active' : '' %>"
-                >Login</a
-            >
-        </li>
-        <li>
-            <a href="/signup" class="<%= path === '/signup' ? 'active' : '' %>"
-                >Sign Up</a
-            >
-        </li>
+        <a href="/login" class="<%= path === '/login' ? 'active' : '' %>"
+            >Login</a
+        >
         <% } %>
-    </ul>
+    </div>
+
+    <!-- ✅ Overlay Menu (hidden by default) -->
+    <div class="nav-overlay" id="nav-overlay">
+        <ul>
+            <% if (isLoggedIn) { %>
+            <li>
+                <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
+            </li>
+            <li>
+                <a href="/cart" class="<%= path === '/cart' ? 'active' : '' %>"
+                    >Cart</a
+                >
+            </li>
+            <li>
+                <a
+                    href="/order"
+                    class="<%= path === '/order' ? 'active' : '' %>"
+                    >Order</a
+                >
+            </li>
+            <li>
+                <a
+                    href="/admin/add-product"
+                    class="<%= path === '/admin/add-product' ? 'active' : '' %>"
+                    >Add Item</a
+                >
+            </li>
+            <li>
+                <a
+                    href="/admin/products"
+                    class="<%= path === '/admin/products' ? 'active' : '' %>"
+                    >Admin Products</a
+                >
+            </li>
+            <% } else { %>
+            <li>
+                <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
+            </li>
+            <li>
+                <a
+                    href="/login"
+                    class="<%= path === '/login' ? 'active' : '' %>"
+                    >Login</a
+                >
+            </li>
+            <li>
+                <a
+                    href="/signup"
+                    class="<%= path === '/signup' ? 'active' : '' %>"
+                    >Sign Up</a
+                >
+            </li>
+            <% } %>
+        </ul>
+    </div>
 </nav>
+<script src="/js/action.js"></script>

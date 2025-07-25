@@ -71,6 +71,21 @@
         margin-bottom: 1rem;
         font-weight: bold;
     }
+
+    a[href='/signup'] {
+        display: block;
+        color: #333;
+        margin: 1rem auto;
+        text-decoration: none;
+    }
+
+    a[href='/signup']:hover {
+        color: gray;
+    }
+
+    .or {
+        margin: 0 auto 1rem;
+    }
 </style>
 </head>
 
@@ -95,7 +110,8 @@
                 <input type="email" name="email" placeholder="Email" class="input" required />
 
                 <input type="password" name="password" placeholder="Password" class="input" required />
-
+                <a href="/signup">Sign up</a>
+                <div class="or">or</div>
                 <button class="btn" type="submit">Login</button>
             </form>
         </div>

@@ -1,10 +1,9 @@
-<%- include('../partials/head') %>
 <style>
     body {
         font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
         margin: 0;
         padding: 0;
-        background-color: #f4f4f4;
     }
 
     main {
@@ -16,7 +15,7 @@
     }
 
     .center {
-        max-width: 800px;
+        max-width: 850px;
         margin: 0 auto;
         background-color: #fff;
         padding: 2rem 2.5rem;
@@ -27,29 +26,45 @@
     h1 {
         text-align: center;
         font-size: 2rem;
+        color: #333;
+        margin-bottom: 1.5rem;
+    }
+
+    .cart-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 2rem 2.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .cart-container h1 {
+        text-align: center;
+        font-size: 2rem;
         margin-bottom: 1rem;
         color: #333;
     }
 
-    hr {
+    .cart-container hr {
         margin: 1rem 0 2rem;
     }
 
-    .total {
+    .cart-container .cart-total {
         font-size: 1.25rem;
-        color: #007BFF;
+        color: #007bff;
         font-weight: bold;
         text-align: center;
         margin-bottom: 2rem;
     }
 
-    ul {
+    .cart-container .cart-list {
         list-style: none;
         padding: 0;
         margin: 0;
     }
 
-    li {
+    .cart-container .cart-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -57,23 +72,20 @@
         padding: 1rem 0;
     }
 
-    li h2 {
+    .cart-container .cart-title {
         margin: 0;
         font-size: 1.2rem;
         color: #222;
     }
 
-    li strong {
+    .cart-container .cart-price,
+    .cart-container .cart-qty {
         margin-left: 0.5rem;
         color: #555;
         font-size: 1rem;
     }
 
-    li form {
-        display: inline;
-    }
-
-    button {
+    .cart-container .cart-delete-btn {
         background-color: #dc3545;
         color: white;
         border: none;
@@ -84,33 +96,37 @@
         transition: background-color 0.2s ease;
     }
 
-    button:hover {
+    .cart-container .cart-delete-btn:hover {
         background-color: #c82333;
     }
 
-    .order-form {
+    .cart-container .order-form {
         text-align: center;
         margin-top: 2rem;
     }
 
-    .order-form button {
+    .cart-container .order-btn {
         background-color: #28a745;
         padding: 0.6rem 1.2rem;
         font-size: 1rem;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
     }
 
-    .order-form button:hover {
+    .cart-container .order-btn:hover {
         background-color: #218838;
     }
 
-    .empty-message {
+    .cart-container .empty-message {
         text-align: center;
         font-size: 1.1rem;
         color: #888;
         margin-top: 2rem;
     }
 </style>
-</head>
 
 <body>
     <main>
@@ -118,43 +134,66 @@
             <%- include('../partials/nav', { isLoggedIn: isLoggedIn }) %>
         </header>
 
-        <div class="center">
+        <div class="center cart-container">
             <h1>Cart List</h1>
-            <hr>
+            <hr />
 
             <% if (products.length > 0) { %>
-                <div class="total">Total: $<%= totalPrice.toFixed(2) %></div>
-                <ul>
-                    <% for (let product of products) { %>
-                        <li>
-                            <div>
-                                <h2><%= product.productId.title %></h2>
-                                <strong>$<%= product.productId.price.toFixed(2) %></strong>
-                                <strong>(Qty: <%= product.qty %>)</strong>
-                            </div>
-                            <div>
-                                <form action="/delete-cart" method="post">
-                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                                    <input type="hidden" name="productId" value="<%= product.productId._id %>" />
-                                    <button type="submit">Delete</button>
-                                </form>
-                            </div>
-                        </li>
-                    <% } %>
-                </ul>
+            <div class="cart-total">Total: $<%= totalPrice.toFixed(2) %></div>
+            <ul class="cart-list">
+                <% for (let product of products) { %>
+                <li class="cart-item">
+                    <div class="cart-info">
+                        <h2 class="cart-title">
+                            <%= product.productId.title %>
+                        </h2>
+                        <strong class="cart-price"
+                            >$<%= product.productId.price.toFixed(2) %></strong
+                        >
+                        <strong class="cart-qty"
+                            >(Qty: <%= product.qty %>)</strong
+                        >
+                    </div>
+                    <div class="cart-actions">
+                        <form action="/delete-cart" method="post">
+                            <input
+                                type="hidden"
+                                name="_csrf"
+                                value="<%= csrfToken %>"
+                            />
+                            <input
+                                type="hidden"
+                                name="productId"
+                                value="<%= product.productId._id %>"
+                            />
+                            <button type="submit" class="cart-delete-btn">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </li>
+                <% } %>
+            </ul>
 
-                <div class="order-form">
-                    <form action="/add-order" method="post">
-                        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                        <button type="submit">Add to Order</button>
-                    </form>
-                </div>
+            <div class="order-form">
+                <form action="/add-order" method="post">
+                    <input
+                        type="hidden"
+                        name="_csrf"
+                        value="<%= csrfToken %>"
+                    />
+                    <button type="submit" class="order-btn">
+                        Add to Order
+                    </button>
+                </form>
+            </div>
             <% } else { %>
-                <div class="empty-message">
-                    <h2>There's nothing in cart...</h2>
-                </div>
+            <div class="empty-message">
+                <h2>There's nothing in cart...</h2>
+            </div>
             <% } %>
         </div>
     </main>
 
     <%- include('../partials/end') %>
+</body>
