@@ -12,10 +12,12 @@
 
     /* Always visible (right side) */
     .nav-fixed-right {
-        display: flex;
+        display: none;
         align-items: center;
         justify-content: center;
         gap: 1rem;
+        font-weight: bold;
+        color: #333;
     }
 
     .nav-fixed-right form {
@@ -25,8 +27,8 @@
     .nav-fixed-right a,
     .nav-fixed-right button {
         text-decoration: none;
+        font-weight: bold;
         color: #333;
-        font-weight: 500;
         background: none;
         border: none;
         cursor: pointer;
@@ -138,6 +140,10 @@
             display: none;
         }
         .hamburger {
+            display: flex;
+        }
+
+        .nav-fixed-right {
             display: flex;
         }
     }
