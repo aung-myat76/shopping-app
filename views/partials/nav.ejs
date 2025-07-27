@@ -102,9 +102,44 @@
         width: auto; /* or 100% if you want full width clickable */
         text-align: center;
     }
-    .nav-overlay a:hover,
-    .nav-fixed-right a:hover {
+
+    .nav-links a {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+        margin: 0 0.5rem;
+    }
+
+    .nav-links a:hover {
+        border-bottom: 2px solid #007bff;
+    }
+
+    .nav-links a.active {
         color: #007bff;
+        border-bottom: 2px solid #007bff;
+    }
+
+    .nav-overlay a:hover,
+    .nav-fixed-right a:hover,
+    .nav-links a:hover {
+        color: #007bff;
+    }
+
+    /* ✅ Large screen – show full nav, hide hamburger & overlay */
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        /* ✅ Mobile – hide full nav, show hamburger */
+        .nav-links {
+            display: none;
+        }
+        .hamburger {
+            display: flex;
+        }
     }
 
     /* ✅ Mobile Only */
@@ -114,16 +149,44 @@
         }
     }
 </style>
-
 <nav>
-    <!-- ✅ Hamburger Menu (mobile only, left side) -->
+    <!-- ✅ Hamburger (mobile only) -->
     <div class="hamburger" id="menu-toggle">
         <span></span>
         <span></span>
         <span></span>
     </div>
 
-    <!-- ✅ Always visible (Home + Logout) -->
+    <!-- ✅ Left-side full nav for large screens -->
+    <div class="nav-links">
+        <% if (isLoggedIn) { %>
+        <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
+        <a href="/cart" class="<%= path === '/cart' ? 'active' : '' %>">Cart</a>
+        <a href="/order" class="<%= path === '/order' ? 'active' : '' %>"
+            >Order</a
+        >
+        <a
+            href="/admin/add-product"
+            class="<%= path === '/admin/add-product' ? 'active' : '' %>"
+            >Add Item</a
+        >
+        <a
+            href="/admin/products"
+            class="<%= path === '/admin/products' ? 'active' : '' %>"
+            >Admin Products</a
+        >
+        <% } else { %>
+        <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
+        <a href="/login" class="<%= path === '/login' ? 'active' : '' %>"
+            >Login</a
+        >
+        <a href="/signup" class="<%= path === '/signup' ? 'active' : '' %>"
+            >Sign Up</a
+        >
+        <% } %>
+    </div>
+
+    <!-- ✅ Always visible right-side -->
     <div class="nav-fixed-right">
         <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
 
@@ -139,59 +202,22 @@
         <% } %>
     </div>
 
-    <!-- ✅ Overlay Menu (hidden by default) -->
+    <!-- ✅ Overlay for mobile menu -->
     <div class="nav-overlay" id="nav-overlay">
         <ul>
             <% if (isLoggedIn) { %>
-            <li>
-                <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
-            </li>
-            <li>
-                <a href="/cart" class="<%= path === '/cart' ? 'active' : '' %>"
-                    >Cart</a
-                >
-            </li>
-            <li>
-                <a
-                    href="/order"
-                    class="<%= path === '/order' ? 'active' : '' %>"
-                    >Order</a
-                >
-            </li>
-            <li>
-                <a
-                    href="/admin/add-product"
-                    class="<%= path === '/admin/add-product' ? 'active' : '' %>"
-                    >Add Item</a
-                >
-            </li>
-            <li>
-                <a
-                    href="/admin/products"
-                    class="<%= path === '/admin/products' ? 'active' : '' %>"
-                    >Admin Products</a
-                >
-            </li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/cart">Cart</a></li>
+            <li><a href="/order">Order</a></li>
+            <li><a href="/admin/add-product">Add Item</a></li>
+            <li><a href="/admin/products">Admin Products</a></li>
             <% } else { %>
-            <li>
-                <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
-            </li>
-            <li>
-                <a
-                    href="/login"
-                    class="<%= path === '/login' ? 'active' : '' %>"
-                    >Login</a
-                >
-            </li>
-            <li>
-                <a
-                    href="/signup"
-                    class="<%= path === '/signup' ? 'active' : '' %>"
-                    >Sign Up</a
-                >
-            </li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup">Sign Up</a></li>
             <% } %>
         </ul>
     </div>
 </nav>
+
 <script src="/js/action.js"></script>
