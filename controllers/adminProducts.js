@@ -3,7 +3,7 @@ const { validationResult } = require("express-validator");
 const Product = require("../models/Product");
 const { deleteFile } = require("../ultil/file");
 
-const PRODUCT_PER_PAGE = 1;
+const PRODUCT_PER_PAGE = 4;
 
 exports.getAddProduct = (req, res, next) => {
     res.render("admin/add-product", { path: "/admin/add-product" });
