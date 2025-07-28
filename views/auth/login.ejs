@@ -13,6 +13,10 @@
         margin-bottom: 2rem;
     }
 
+    .container {
+        margin: 3rem;
+    }
+
     .center {
         max-width: 400px;
         margin: 0 auto;
@@ -92,7 +96,7 @@
         <header>
             <%- include('../partials/nav', { isLoggedIn: isLoggedIn }) %>
         </header>
-
+        <div class="container">
         <div class="center">
             <div>
                 <h1>Login</h1>
@@ -112,6 +116,7 @@
                 <div class="or">or</div>
                 <button class="btn" type="submit">Login</button>
             </form>
+        </div>
         </div>
     </main>
 <%- include('../partials/end') %>

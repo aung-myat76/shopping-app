@@ -206,13 +206,15 @@
             </form>
         </div>
         <% } else { %>
-        <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
-        <a href="/login" class="<%= path === '/login' ? 'active' : '' %>"
-            >Login</a
-        >
-        <a href="/signup" class="<%= path === '/signup' ? 'active' : '' %>"
-            >Sign Up</a
-        >
+        <div class="links">
+            <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
+            <a href="/login" class="<%= path === '/login' ? 'active' : '' %>"
+                >Login</a
+            >
+            <a href="/signup" class="<%= path === '/signup' ? 'active' : '' %>"
+                >Sign Up</a
+            >
+        </div>
         <% } %>
     </div>
 

@@ -12,6 +12,10 @@
         margin-bottom: 2rem;
     }
 
+    .container {
+        margin: 3rem;
+    }
+
     .center {
         max-width: 500px;
         margin: 0 auto;
@@ -72,7 +76,7 @@
         transition: background-color 0.2s ease;
         text-transform: uppercase;
         display: block;
-        width: 50%;
+        width: 75%;
         margin: auto;
     }
 
@@ -94,7 +98,7 @@
         <header>
             <%- include('../partials/nav', { isLoggedIn: isLoggedIn }) %>
         </header>
-
+        <div class="container">x
         <div class="center">
             <h1>Edit Product</h1>
             <% if (error_msg) { %>
@@ -110,6 +114,7 @@
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                 <button type="submit" class="btn">Update</button>
             </form>
+        </div>
         </div>
     </main>
 <%- include('../partials/end') %>
