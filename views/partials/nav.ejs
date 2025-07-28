@@ -8,6 +8,8 @@
         align-items: center;
         position: relative;
         z-index: 20;
+        margin: 0;
+        height: 2rem;
     }
 
     /* Always visible (right side) */
@@ -41,6 +43,7 @@
         border-radius: 0.4rem;
         padding: 0.5rem 1rem;
         font-weight: bold;
+        border: none;
     }
     button#logout:hover {
         opacity: 0.9;
@@ -116,7 +119,7 @@
         border-bottom: 2px solid #007bff;
     }
 
-    .nav-links a.active {
+    nav a.active {
         color: #007bff;
         border-bottom: 2px solid #007bff;
     }
@@ -125,12 +128,21 @@
     .nav-fixed-right a:hover,
     .nav-links a:hover {
         color: #007bff;
+        border-bottom: 2px solid #007bff;
     }
 
     /* ✅ Large screen – show full nav, hide hamburger & overlay */
     .nav-links {
         display: flex;
         align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .links {
+        display: flex;
+        align-items: center;
+
         gap: 1rem;
     }
 
@@ -157,30 +169,42 @@
 </style>
 <nav>
     <!-- ✅ Hamburger (mobile only) -->
+    <% if (isLoggedIn) { %>
     <div class="hamburger" id="menu-toggle">
         <span></span>
         <span></span>
         <span></span>
     </div>
+    <% } %>
 
     <!-- ✅ Left-side full nav for large screens -->
     <div class="nav-links">
         <% if (isLoggedIn) { %>
-        <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
-        <a href="/cart" class="<%= path === '/cart' ? 'active' : '' %>">Cart</a>
-        <a href="/order" class="<%= path === '/order' ? 'active' : '' %>"
-            >Order</a
-        >
-        <a
-            href="/admin/add-product"
-            class="<%= path === '/admin/add-product' ? 'active' : '' %>"
-            >Add Item</a
-        >
-        <a
-            href="/admin/products"
-            class="<%= path === '/admin/products' ? 'active' : '' %>"
-            >Admin Products</a
-        >
+        <div class="links">
+            <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
+            <a href="/cart" class="<%= path === '/cart' ? 'active' : '' %>"
+                >Cart</a
+            >
+            <a href="/order" class="<%= path === '/order' ? 'active' : '' %>"
+                >Order</a
+            >
+            <a
+                href="/admin/add-product"
+                class="<%= path === '/admin/add-product' ? 'active' : '' %>"
+                >Add Item</a
+            >
+            <a
+                href="/admin/products"
+                class="<%= path === '/admin/products' ? 'active' : '' %>"
+                >Admin Products</a
+            >
+        </div>
+        <div>
+            <form action="/logout" method="POST" style="display: inline">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                <button type="submit" id="logout">Logout</button>
+            </form>
+        </div>
         <% } else { %>
         <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
         <a href="/login" class="<%= path === '/login' ? 'active' : '' %>"
@@ -204,6 +228,9 @@
         <% } else { %>
         <a href="/login" class="<%= path === '/login' ? 'active' : '' %>"
             >Login</a
+        >
+        <a href="/signup" class="<%= path === '/signup' ? 'active' : '' %>"
+            >Sign Up</a
         >
         <% } %>
     </div>

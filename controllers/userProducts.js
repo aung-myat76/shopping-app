@@ -44,6 +44,7 @@ exports.getCart = (req, res, next) => {
                 return res.redirect("/");
             }
             const cartProducts = user.cart.products;
+            console.log(cartProducts);
             res.render("shop/cart", {
                 path: "/cart",
                 products: cartProducts,
