@@ -58,10 +58,16 @@ hr {
 }
 
 /* ✅ Image styling */
-.product-card img {
+.product-card .image-container {
     width: 100%;
     height: 180px;
-    object-fit: cover;
+    overflow: hidden;
+}
+
+.product-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
     border-radius: 6px;
     margin-bottom: 0.8rem;
 }
@@ -157,7 +163,9 @@ hr {
                 <ul class="product-grid">
                     <% for (let product of products) { %>
                         <li class="product-card">
-                            <img src="/<%= product.image %>" alt="<%= product.title %>">
+                            <div class="image-container">
+                                <img src="/<%= product.image %>" alt="<%= product.title %>">
+                            </div>
                             <h2><%= product.title %></h2>
                             <strong>$<%= product.price.toFixed(2) %></strong>
                             <div class="actions">
